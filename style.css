@@ -78,6 +78,8 @@ nav a {
   width: auto;
   height: auto;
   text-align: center;
+  padding: 50px;
+  margin-bottom: 100px;
 }
 
 .entete h1 {
@@ -216,110 +218,320 @@ nav a {
 
 /* ------ section catalogue ------ */
 
-#noscreations {
-  background-color: var(--bleu);
-  padding: 30px;
-  border-bottom: 3px solid var(--dorée);
-}
-
-.nc {
-  background-color: var(--marron);
-  border: 3px solid var(--dorée);
-  border-radius: 25px;
-  display: flex;
-  justify-content: center;
-  gap: calc(30 * var(--res));
-}
-
-.nc h2 {
-  font-family: 'Clicker Script', cursive;
-  color: white;
-  font-size: calc(120 * var(--res));
+.titrephoto {
+  color: black;
+  border-top: 6px solid var(--bleu);
+  border-bottom: 15px solid var(--bleu);
+  width: 100%;
   text-decoration: underline;
-  text-decoration-color: white;
   text-decoration-thickness: 3px;
   text-underline-offset: 20px;
-  /* text-shadow: 3px 0px 0px #938e63; */
+  font-size: calc(50 * var(--res));
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
 }
 
-.nci {
+.back {
+  background-color: var(--bleu);
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 600px;
+}
+
+.carousel {
+  /* prev & next buttons */
+  --nav-btn-size: 40px;
+  --nav-btn-bg: rgb(15, 23, 43);
+  --nav-btn-txt: white;
+
+  /* item markers */
+  --nav-marker-bg: 20px;
+  --nav-marker-bg: rgb(15, 23, 43);
+
+  width: min(calc(100% - 2rem), 700px);
+  list-style: none;
+  padding-block: 2rem; /* create space for drop shadows */
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 250px;
+  gap: 0;
+  @supports not selector(::scroll-marker-group) {
+    /* add gap for browsers that don't suppor ::scroll-* */
+    gap: 1rem;
+  }
+  anchor-name: --carousel;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behaviour-x: contain;
+  scroll-behavior: smooth; /* keep things smooth (should probably be wihtin a prefers query) */
+  scrollbar-width: none;
+
+  /* empty pseudo elements to push first and last items to the middle */
+  &::before,
+  &::after {
+    content: '';
+  }
+
+  /**************** MARKERS GROUP *******************/
+  /* the item markers will be dynamically placed within this element */
+  scroll-marker-group: after; /* place after elements*/
+  &::scroll-marker-group {
+    position: absolute;
+    position-anchor: --carousel;
+    inline-size: min(90cqi, 400px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+    gap: 0.25rem;
+    padding-block-start: 1rem;
+    top: anchor(bottom);
+    left: calc(anchor(left) - 10%);
+    right: calc(anchor(right) - 10%);
+  }
+  /* carousel item*/
+  > div {
+    position: relative;
+    scroll-snap-align: center; /* centers snap */
+    scroll-snap-stop: always; /* ensures that the scroll stops at each element */
+    container-type: scroll-state; /* define container for child animations */
+
+    display: grid;
+    grid-template-areas: 'img' 'title' 'desc';
+    text-align: center;
+
+    /* scroll to this item on load */
+    &.scroll-start {
+      scroll-initial-target: nearest;
+    }
+    > * {
+      /*outline: 1px dashed red;*/
+    }
+    /* item title/name */
+    > h2 {
+      grid-area: title;
+      margin: 1rem 0 0 0;
+      font-size: 1.3rem;
+      white-space: nowrap;
+      transition: all 300ms ease-in-out;
+      /* not current item */
+      @container not scroll-state(snapped: inline) {
+        scale: 0.5;
+        opacity: 0.5;
+        translate: 0 -100px;
+      }
+    }
+    > p {
+      grid-area: desc;
+      margin: 0;
+      white-space: nowrap;
+      transition: all 300ms ease-in-out;
+      @container not scroll-state(snapped: inline) {
+        scale: 0.5;
+        opacity: 0;
+        /*translate: 0 100px;*/
+      }
+    }
+    > .img {
+      grid-area: img;
+      width: 100%;
+      aspect-ratio: 3/4;
+      transition: all 300ms ease-in-out;
+      transform-origin: center center;
+      /* not current item */
+      @container not scroll-state(snapped: inline) {
+        scale: 0.5;
+        opacity: 0.5;
+      }
+      & > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 20px;
+        box-shadow: 0 10px 20px rgba(0 0 0 / 0.25);
+        border: 5px solid var(--beige);
+      }
+    }
+
+    /************** MARKERS **************/
+    &::scroll-marker {
+      content: ' ';
+      height: 20px;
+      aspect-ratio: 1;
+      background-color: var(--beige);
+      border-radius: 50%;
+      transition: 150ms ease-in-out;
+      scale: 0.75;
+      opacity: 0.25;
+    }
+    /* current item marker */
+    &::scroll-marker:target-current {
+      opacity: 1;
+      scale: 1;
+    }
+    /* hover and keyboard focus */
+    &::scroll-marker:where(:hover, :focus-visible) {
+      opacity: 1;
+    }
+    /* keybaord focus-*/
+    &::scroll-marker:focus-visible {
+      outline: 1px dashed var(--nav-marker-bg);
+      outline-offset: 4px;
+    }
+  }
+
+  /************* NAV BUTTONS(left and right) ************/
+  &::scroll-button(*) {
+    position: absolute;
+    position-anchor: --carousel;
+    width: var(--nav-btn-size);
+    aspect-ratio: 1/1;
+    font: inherit;
+    background-color: var(--nav-btn-bg);
+    display: grid;
+    place-content: center;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    opacity: 1;
+    cursor: pointer;
+    transition: all 150ms ease-in-out;
+    outline: 1px dashed transparent;
+    outline-offset: 0px;
+  }
+  /* button - prev */
+  &::scroll-button(inline-start) {
+    content: '❮';
+    left: calc(anchor(left) - var(--nav-btn-size));
+  }
+  /* button - next */
+  &::scroll-button(inline-end) {
+    content: '❯';
+    right: calc(anchor(right) - var(--nav-btn-size));
+  }
+  /* hover and keyboard focus */
+  &::scroll-button(*):not(:disabled):where(:hover, :focus-visible) {
+    opacity: 1;
+    scale: 1.1;
+  }
+  /* keyboard focus*/
+  &::scroll-button(*):focus-visible {
+    outline: 1px dashed var(--nav-btn-bg);
+    outline-offset: 4px;
+  }
+  /* disabled */
+  &::scroll-button(*):disabled {
+    opacity: 0.25;
+    cursor: unset;
+  }
+}
+
+/* general styling not relevant for this demo */
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  :root {
+    color-scheme: light dark;
+    --bg-dark: rgb(16, 24, 40);
+    --bg-light: rgb(248, 244, 238);
+    --txt-light: rgb(10, 10, 10);
+    --txt-dark: rgb(245, 245, 245);
+    --line-light: rgba(0 0 0 / 0.25);
+    --line-dark: rgba(255 255 255 / 0.25);
+    /*
+    --clr-bg: light-dark(var(--bg-light), var(--bg-dark));
+    --clr-txt: light-dark(var(--txt-light), var(--txt-dark));
+    --clr-lines: light-dark(var(--line-light), var(--line-dark));
+    */
+  }
+
+  body {
+    background-color: #fff;
+    color: var(--txt-light);
+    min-height: 100svh;
+    margin: 0;
+    font-family: 'Jura', sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    & > * {
+      /*outline: 1px dashed red;*/
+    }
+  }
+  h1 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+
+  .msg-supports {
+    font-size: 0.8rem;
+    /*
+    @supports (animation-timeline: scroll()) {
+			display: none;
+		}
+    @supports (order:sibling-index()) {
+			display: none;
+		}
+    @supports (x: attr(x type(*))) {
+			display: none;
+		}
+    */
+    @supports selector(::scroll-marker-group) {
+      display: none;
+    }
+  }
+}
+
+/* #noscreations {
+  background-color: var(--bleu);
+  padding: 30px;
+}
+
+#noscreations h2 {
   color: white;
   display: flex;
-  justify-content: space-around;
-  gap: calc(30 * var(--res));
+  justify-content: center;
   align-items: center;
-  text-align: center;
 }
 
-.nci h3,
-.nci p {
-  color: black;
-  font-size: calc(30 * var(--res));
-  padding: 20px;
-  border-radius: 25px;
-  background-color: var(--beige);
+.caroussel {
+}
+
+.oeuvre {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: calc(30 * var(--res));
+  margin-top: 20px;
 }
 
-.nci .p1 {
-  background-image: url(images/robot\ lampe.jpg);
-  background-size: cover;
-  background-position: center;
+.oeuvre img {
   width: calc(400 * var(--res));
-  height: calc(400 * var(--res));
-  border: 2px solid var(--beige);
+  border: 3px solid black;
   border-radius: 25px;
-}
+} */
 
 /*  separation */
 
 .separation {
   background-color: var(--marron);
+  width: 100%;
   height: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 80px;
 }
 
 .separation img {
   width: calc(500 * var(--res));
-}
-
-/* ------ section Décoration Extérieure ------ */
-
-#noscreations2 {
-  background-color: var(--bleu);
-  padding: 30px;
-  border-top: 3px solid var(--dorée);
-}
-
-.nce {
-  color: white;
-  display: flex;
-  justify-content: space-around;
-  gap: calc(30 * var(--res));
-  align-items: center;
-  text-align: center;
-}
-
-.nce h3,
-.nce p {
-  color: black;
-  font-size: calc(30 * var(--res));
-  padding: 20px;
-  border-radius: 25px;
-  background-color: var(--beige);
-  display: flex;
-  flex-direction: column;
-}
-
-.nce .e2 {
-  background-image: url(images/mouton.jpg);
-  background-size: cover;
-  background-position: center;
-  width: calc(400 * var(--res));
-  height: calc(400 * var(--res));
-  border: 2px solid var(--beige);
-  border-radius: 25px;
 }
