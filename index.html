@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Clicker+Script&family=Fleur+De+Leah&display=swap');
+</style>
+    <title>LCK</title>
+  </head>
+  <body>
+    <!-- barre de navigation -->
+
+    <header>
+      <div class="nav-container">
+        <h1><img src="images/LCK.svg" alt="logo LCK" /></h1>
+        <nav>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="equipes.html">Créateurs</a></li>
+            <li><a href="calendrier.html">Expositions</a></li>
+            <li><a href="resultats.html">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <section class="entete">
+      <h1><img src="images/LCK.svg" alt="Les Créations Kothe" /></h1>
+      <p>
+        Bienvenue sur le site LCK, Créations artisanales d'objets de décoration
+        pour votre intérieur et extérieur.
+      </p>
+    </section>
+
+    <section id="noscreations">
+      <div class="nc">
+        <h2>Nos créations</h2>
+      </div>
+      <div class="nci">
+        <div>
+          <p class="p1"></p>
+        </div>
+        <div>
+          <h3>Décoration intérieure</h3>
+          <p>
+            Découvrez nos créations artisanales uniques, conçues avec passion et
+            savoir-faire pour embellir votre intérieur. Chaque pièce est soigneusement fabriquée.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="separation">
+        <img src="images/Les Créations Kothe sans fond.png" alt="">
+    </div>
+
+    <section id="noscreations2">
+      <div>
+        <div class="nce">
+            <div>
+          <h3>Décoration extérieure</h3>
+          <p>
+            Apportez une touche d'élégance à votre espace extérieur avec nos
+            créations artisanales uniques. Chaque pièce est conçue pour résister
+            aux éléments tout en ajoutant une esthétique charmante à votre jardin,
+            terrasse ou balcon.
+          </p>
+        </div>
+        <div>
+          <p class="e2"></p>
+        </div>
+      </div>
+    </section>
+
+    <div class="accordion">
+      <div class="summary">Qui sommes-nous ?</div>
+      <div class="content">
+        <section id="presentation">
+          <div class="createurs">
+            <div class="pdc">
+              <img src="images/profils.jpg" alt="photos des créateurs" />
+            </div>
+            <div class="p1">
+              <h2>Les créations Kothe</h2>
+            </div>
+            <div class="p2">
+              <p>
+                Bonjour, nous sommes ravis de vous présenter nos créations
+                artisanales. Nous sommes passionnés par la création d'objets de
+                décoration uniques, faits à la main. Notre objectif est de vous
+                offrir des pièces qui ajoutent une touche d'élégance et de
+                charme à votre intérieur ou extérieur. Nous espérons que vous
+                apprécierez notre travail autant que nous avons aimé le créer.
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="accordion">
+      <div class="summary">Où sommes-nous ?</div>
+      <div class="content">
+        <section id="localisation">
+          <div class="position">
+            <div class="carte">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d418970.0985461793!2d2.7988491015054073!3d46.3807867495247!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f0dbba70f40c2f%3A0x3093cafcbe325a0!2sAllier!5e0!3m2!1sfr!2sfr!4v1780411990311!5m2!1sfr!2sfr"
+                width="80%"
+                height="50%"
+                style="border: 10px solid white; border-radius: 50px"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
+            <div class="n1">
+              <h2>Notre localisation</h2>
+            </div>
+            <div class="n2">
+              <p>
+                On ce situe dans la region Auvergne-Rhône-Alpes, plus
+                précisément dans l'allier. Nous sommes basés à deux-pas de
+                Moulins, ville riche en histoire et en culture. Nous sommes
+                fiers de faire partie de cette communauté dynamique et créative,
+                et nous espérons que nos créations artisanales apporteront une
+                touche d'originalité à votre intérieur ou extérieur, où que vous
+                soyez dans le monde.
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+      document.querySelectorAll('.summary').forEach((summary) => {
+        summary.addEventListener('click', () => {
+          const accordion = summary.parentElement;
+
+          document.querySelectorAll('.accordion').forEach((item) => {
+            if (item !== accordion) {
+              item.classList.remove('active');
+            }
+          });
+
+          accordion.classList.toggle('active');
+        });
+      });
+    </script>
+  </body>
+</html>
